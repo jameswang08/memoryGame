@@ -33,7 +33,27 @@ function App() {
     }
   }
 
+  function resetClicks(){
+    let newList = [...spriteList];
+    newList = newList.map( item => ({ ...item, clicked: false }));
+    setSpriteList(newList);
+  }
 
+  function updateScore(index){
+    if(spriteList[index].clicked==false){
+      //Increment score
+      setScore(score+1);
+      //Track the click
+      const newList = [...spriteList];
+      newList[index].clicked = true;
+      setSpriteList(newList);
+    }
+    else{
+      if(score>highScore) setHighScore(score);
+      setScore(0);
+      resetClicks();
+    }
+  }
 
   useEffect(() => {
     getSprites();
@@ -46,7 +66,7 @@ function App() {
         <h1>High Score: {highScore}</h1>
       </div>
       {spriteList.map((item, index) => {
-        return <img src={item.link} alt="Image of a Pokemon" key={index}></img>
+        return <img src={item.link} alt="Image of a Pokemon" key={index} onClick={() => updateScore(index)}></img>
       })}
     </>
   );
